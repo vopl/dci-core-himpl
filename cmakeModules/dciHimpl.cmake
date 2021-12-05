@@ -129,10 +129,11 @@ if(NOT COMMAND dciHimplMakeLayouts)
 
         ############################################################
         set(src "${CMAKE_CURRENT_BINARY_DIR}/${target}/implMetaInfoGen.cpp")
+        file(RELATIVE_PATH path4Comment ${CMAKE_BINARY_DIR} ${src})
         add_custom_command(OUTPUT ${src}
                            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${srcSkeleton} ${src}
                            DEPENDS ${srcSkeleton}
-                           COMMENT "Generating ${src}"
+                           COMMENT "Generating ${path4Comment}"
         )
 
         set(implMetaInfoGen ${target}-implMetaInfoGen)
@@ -152,10 +153,11 @@ if(NOT COMMAND dciHimplMakeLayouts)
         endif()
 
         ############################################################
+        file(RELATIVE_PATH path4Comment ${CMAKE_BINARY_DIR} ${A_OUTPUT_absolute})
         add_custom_command(OUTPUT ${A_OUTPUT_absolute}
-                           COMMAND ${implMetaInfoGen} > ${A_OUTPUT_absolute}
-                           DEPENDS ${implMetaInfoGen}
-                           COMMENT "Generating ${A_OUTPUT_absolute}"
+                           COMMAND ${implMetaInfoGen}-cmd > ${A_OUTPUT_absolute}
+                           DEPENDS ${implMetaInfoGen} ${implMetaInfoGen}-cmd
+                           COMMENT "Generating ${path4Comment}"
         )
 
         target_sources(${target} PRIVATE ${A_OUTPUT_absolute})

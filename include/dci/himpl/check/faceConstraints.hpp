@@ -47,7 +47,7 @@ namespace dci::himpl::check
             using T::T;
         };
 
-        template <class DS> static std::true_type  test(decltype(new DS(std::declval<Args>()...))*);
+        template <class DS> static std::true_type  test(decltype(new DS{std::declval<Args>()...})*);
         template <class DS> static std::false_type test(...);
 
         static constexpr bool value = decltype(test<DerivedStub>(nullptr))::value;
