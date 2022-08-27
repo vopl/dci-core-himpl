@@ -9,6 +9,7 @@
 
 #include <type_traits>
 #include <cstddef>
+#include <cstdint>
 
 namespace dci::himpl::details
 {
