@@ -8,64 +8,65 @@
 #pragma once
 
 #include "details/implOffsetEvaluator.hpp"
+#include <bit>
 
 namespace dci::himpl
 {
     /////////0/////////1/////////2/////////3/////////4/////////5/////////6/////////7
     template <class TFace>
-    typename TFace::Impl* face2Impl(TFace* p) noexcept
+    constexpr typename TFace::Impl* face2Impl(TFace* p) noexcept
     {
-        static constexpr std::size_t implOffset = details::ImplOffsetEvaluator<TFace>::_value;
+        constexpr std::size_t implOffset = details::ImplOffsetEvaluator<TFace>::_value;
 
         if constexpr(implOffset)
         {
             if(p)
             {
-                return reinterpret_cast<typename TFace::Impl *>(reinterpret_cast<std::uintptr_t>(p)+implOffset);
+                return std::bit_cast<typename TFace::Impl *>(std::bit_cast<std::uintptr_t>(p)+implOffset);
             }
 
             return nullptr;
         }
 
-        return reinterpret_cast<typename TFace::Impl *>(reinterpret_cast<std::uintptr_t>(p)+implOffset);
+        return std::bit_cast<typename TFace::Impl *>(std::bit_cast<std::uintptr_t>(p)+implOffset);
     }
 
     /////////0/////////1/////////2/////////3/////////4/////////5/////////6/////////7
     template <class TFace>
-    const typename TFace::Impl* face2Impl(const TFace* cp) noexcept
+    constexpr const typename TFace::Impl* face2Impl(const TFace* cp) noexcept
     {
-        static constexpr std::size_t implOffset = details::ImplOffsetEvaluator<TFace>::_value;
+        constexpr std::size_t implOffset = details::ImplOffsetEvaluator<TFace>::_value;
 
         if constexpr(implOffset)
         {
             if(cp)
             {
-                return reinterpret_cast<const typename TFace::Impl *>(reinterpret_cast<std::uintptr_t>(cp)+implOffset);
+                return std::bit_cast<const typename TFace::Impl *>(std::bit_cast<std::uintptr_t>(cp)+implOffset);
             }
 
             return nullptr;
         }
 
-        return reinterpret_cast<const typename TFace::Impl *>(reinterpret_cast<std::uintptr_t>(cp)+implOffset);
+        return std::bit_cast<const typename TFace::Impl *>(std::bit_cast<std::uintptr_t>(cp)+implOffset);
     }
 
     /////////0/////////1/////////2/////////3/////////4/////////5/////////6/////////7
     template <class TFace>
-    typename TFace::Impl& face2Impl(TFace& r) noexcept
+    constexpr typename TFace::Impl& face2Impl(TFace& r) noexcept
     {
         return *face2Impl<TFace>(&r);
     }
 
     /////////0/////////1/////////2/////////3/////////4/////////5/////////6/////////7
     template <class TFace>
-    typename TFace::Impl&& face2Impl(TFace&& rr) noexcept
+    constexpr typename TFace::Impl&& face2Impl(TFace&& rr) noexcept
     {
         return static_cast<typename TFace::Impl&&>(*face2Impl<TFace>(&rr));
     }
 
     /////////0/////////1/////////2/////////3/////////4/////////5/////////6/////////7
     template <class TFace>
-    const typename TFace::Impl& face2Impl(const TFace& cr) noexcept
+    constexpr const typename TFace::Impl& face2Impl(const TFace& cr) noexcept
     {
         return *face2Impl<TFace>(&cr);
     }
